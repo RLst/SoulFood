@@ -24,19 +24,19 @@ namespace SoulFood
 		[Header("Buttons")]
         //Pickup/Drop
         [SerializeField] KeyCode pickupButton = KeyCode.K;
-        public bool pickup { get; private set; }
+        public bool isPickingUp { get; private set; }
 
         //Action
         [SerializeField] KeyCode actionButton = KeyCode.J;
-        public bool action { get; private set; }
+        public bool isAction { get; private set; }
 
         //Dash
         [SerializeField] KeyCode dashButton = KeyCode.L;
-        public bool dash { get; private set; }
+        public bool isDashing { get; private set; }
 
         //Jump
         [SerializeField] KeyCode jumpButton = KeyCode.Space;
-        public bool jump { get; private set; }
+        public bool isJumping { get; private set; }
 
 
         void Update()
@@ -47,10 +47,10 @@ namespace SoulFood
 
         private void HandleButtons()
         {
-            pickup = Input.GetKey(pickupButton) ? true : false;
-            action = Input.GetKey(actionButton) ? true : false;
-            dash = Input.GetKey(dashButton) ? true : false;
-            jump = Input.GetKey(jumpButton) ? true : false;
+            isPickingUp = Input.GetKey(pickupButton) ? true : false;
+            isAction = Input.GetKey(actionButton) ? true : false;
+            isDashing = Input.GetKey(dashButton) ? true : false;
+            isJumping = Input.GetKey(jumpButton) ? true : false;
         }
 
         private void HandleAxes()
