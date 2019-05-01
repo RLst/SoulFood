@@ -422,12 +422,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1869505860}
-  m_LocalRotation: {x: -0.13638313, y: -0.005352348, z: 0.0007368686, w: -0.99064153}
-  m_LocalPosition: {x: -0.08609436, y: 4.2192035, z: -8.438604}
+  m_LocalRotation: {x: -0.3356607, y: -0.0050896397, z: 0.0018136433, w: -0.94196755}
+  m_LocalPosition: {x: 0.610521, y: 15.375003, z: -23.40506}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2146724801}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2146724800
 GameObject:
@@ -458,9 +458,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1440578750}
-  - {fileID: 1869505863}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2146724802
 MonoBehaviour:
@@ -493,7 +492,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f09af50276a9e49ac657671aa717f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 3
+  dashSpeed: 20
 --- !u!143 &2146724804
 CharacterController:
   m_ObjectHideFlags: 0

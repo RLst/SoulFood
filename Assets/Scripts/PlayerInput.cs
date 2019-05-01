@@ -24,36 +24,47 @@ namespace SoulFood
 		[Header("Buttons")]
         //Pickup/Drop
         [SerializeField] KeyCode pickupButton = KeyCode.K;
-        public bool isPickingUp { get; private set; }
+        public bool isPickup { get; private set; }
+        public bool wasPickup { get; private set; }
 
         //Action
         [SerializeField] KeyCode actionButton = KeyCode.J;
         public bool isAction { get; private set; }
+        public bool wasAction { get; private set; }
 
         //Dash
         [SerializeField] KeyCode dashButton = KeyCode.L;
-        public bool isDashing { get; private set; }
+        public bool isDash { get; private set; }
+        public bool wasDash { get; private set; }
 
         //Jump
         [SerializeField] KeyCode jumpButton = KeyCode.Space;
-        public bool isJumping { get; private set; }
+        public bool isJump { get; private set; }
+        public bool wasJump { get; private set; }
 
 
         void Update()
         {
-            HandleAxes();
-            HandleButtons();
+            SetAxes();
+            SetButtons();
         }
 
-        private void HandleButtons()
+        private void SetButtons()
         {
-            isPickingUp = Input.GetKey(pickupButton) ? true : false;
+			//Current button state
+            isPickup = Input.GetKey(pickupButton) ? true : false;
             isAction = Input.GetKey(actionButton) ? true : false;
-            isDashing = Input.GetKey(dashButton) ? true : false;
-            isJumping = Input.GetKey(jumpButton) ? true : false;
+            isDash = Input.GetKey(dashButton) ? true : false;
+            isJump = Input.GetKey(jumpButton) ? true : false;
+
+			//Was button pressed?
+			wasPickup = Input.GetKeyDown(pickupButton) ? true : false;
+			wasAction = Input.GetKeyDown(actionButton) ? true : false;
+			wasDash = Input.GetKeyDown(dashButton) ? true : false;
+			wasJump = Input.GetKeyDown(jumpButton) ? true : false;
         }
 
-        private void HandleAxes()
+        private void SetAxes()
         {
             if (!isRaw)
             {
