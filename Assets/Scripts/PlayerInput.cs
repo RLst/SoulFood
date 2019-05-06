@@ -51,13 +51,13 @@ namespace SoulFood
 
         private void SetButtons()
         {
-			//Current button state
+			//Record button states
             isPickup = Input.GetKey(pickupButton) ? true : false;
             isAction = Input.GetKey(actionButton) ? true : false;
             isDash = Input.GetKey(dashButton) ? true : false;
             isJump = Input.GetKey(jumpButton) ? true : false;
 
-			//Was button pressed?
+			//Record buttons that were pressed this frame
 			wasPickup = Input.GetKeyDown(pickupButton) ? true : false;
 			wasAction = Input.GetKeyDown(actionButton) ? true : false;
 			wasDash = Input.GetKeyDown(dashButton) ? true : false;
