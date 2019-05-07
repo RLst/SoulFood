@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using pokoro;
 
 namespace SoulFood
 {
@@ -7,41 +8,61 @@ namespace SoulFood
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMoveController : MonoBehaviour
     {
+        [Header("Move")]
         [SerializeField] float maxSpeed = 5f;
+
+
+        [Header("Dash")]
         [SerializeField] float dashSpeed = 20f;
         [SerializeField] float dashReduction = 1f;
-        // [SerializeField] float 
-
-        float dashSpeedBoost;
-
-        CharacterController cc;
-        PlayerInput input;
         private bool isDashing;
+        float currentDashAmount;
+
+
+        [Header("Jump")]
+        [SerializeField] float jumpForce;
+        private bool isJumping;
+        private float gravity = 9.81f;
+        float currentJumpAmount;
+
+        [Header("IMGUI style")]
+        [SerializeField] bool displayDebug = true;
+        [SerializeField] GUIStyle debug;
+
+
+        //CACHES
+        new Camera camera;      //Required so that movement aligns with the view
+        PlayerInput input;
+        CharacterController controller;
+
 
         void Start()
         {
-            cc = GetComponent<CharacterController>();
+            camera = Camera.main;
+            controller = GetComponent<CharacterController>();
             input = GetComponent<PlayerInput>();
         }
 
         void Update()
         {
             MoveCharacter();
-
-            DebugActions();
         }
 
-        void DebugActions()
+        void OnGUI()
         {
-            if (input.isPickup) Debug.Log("Picking up!");
-			if (input.isAction) Debug.Log("Action!");
-			if (input.isDash) Debug.Log("Dashing!");
-            if (input.isJump) Debug.Log("Jumping!");
+            if (!displayDebug)
+                return;
+                
+            GUILayout.Label("Controls: WASD Move. J Pick Up. K Action. L Dash. Space Jump", debug);
+            if (input.isPickup) GUILayout.Label("Picking up!", debug);
+			if (input.isAction) GUILayout.Label("Action!", debug);
+			if (input.isDash) GUILayout.Label("Dashing!", debug);
+            if (input.isJump) GUILayout.Label("Jumping!", debug);
 
-			if (input.wasPickup) Debug.Log("Picked up!");
-            if (input.wasAction) Debug.Log("Actioned!");
-            if (input.wasDash) Debug.Log("Dashed!");
-            if (input.wasJump) Debug.Log("Jumped!");
+			if (input.wasPickup) GUILayout.Label("Picked up!", debug);
+            if (input.wasAction) GUILayout.Label("Actioned!", debug);
+            if (input.wasDash) GUILayout.Label("Dashed!", debug);
+            if (input.wasJump) GUILayout.Label("Jumped!", debug);
         }
 
         void MoveCharacter()
@@ -49,39 +70,37 @@ namespace SoulFood
             //Set basic speed
             var speedTotal = maxSpeed;
 
-			//Dash
+			//// Dash
             if (isDashing)   //Start reducing the dash boost (linearly) if currently dashing
             {
-                dashSpeedBoost -= dashReduction;
-                if (dashSpeedBoost < 0)
+                currentDashAmount -= dashReduction;
+                if (currentDashAmount < 0)
                 {
                     //Stop dash status and zero out
                     isDashing = false;
-                    dashSpeedBoost = 0;
+                    currentDashAmount = 0;
                 }
             }
-            if (input.wasDash)  //Can't hold the dash button
+            if (input.wasDash && isDashing == false)  //Can't hold the dash button
             {
                 // speedMultiplier = dashSpeed;
                 isDashing = true;
-                dashSpeedBoost = dashSpeed;
+                currentDashAmount = dashSpeed;
             }
             //Add dash
-            speedTotal += dashSpeedBoost;
+            speedTotal += currentDashAmount;
 
+            //Calculate move motion vector
+            Vector3 moveMotion = input.xAxis * camera.transform.RightSansYNormalized() * speedTotal + 
+                                input.yAxis * camera.transform.ForwardSansYNormalized() * speedTotal;
 
-            //Jump
-            // if (input.wasJump)  //Can't hold the jump button
-            // {
-            //     jumpForce = 
-            // }
+            //Calculate jump motion vector
+            Vector3 jumpMotion = Vector3.zero;  //TODO
 
+            //Combine all motion vectors
+            Vector3 finalMotion = moveMotion + jumpMotion;
 
-            //Calculate speed multiplier
-            var movement = new Vector3(input.xAxis * speedTotal * Time.deltaTime, 0, input.yAxis * speedTotal * Time.deltaTime);
-
-
-            cc.Move(movement);
+            controller.Move(finalMotion * Time.deltaTime);
         }
     }
 }
