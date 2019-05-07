@@ -706,6 +706,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114276855059217386, guid: 92295d5b58f58439096e472e2d36b4bb,
+        type: 2}
+      propertyPath: edgePanningEnabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92295d5b58f58439096e472e2d36b4bb, type: 2}
   m_IsPrefabAsset: 0

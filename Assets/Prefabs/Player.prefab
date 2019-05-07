@@ -129,11 +129,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 10
-  dashSpeed: 15
+  dashSpeed: 13
   dashReduction: 1.5
-  jumpForce: 10
+  jumpForce: 23.5
+  gravity: 3.5
   displayDebug: 1
-  debug:
+  style:
     m_Name: debug
     m_Normal:
       m_Background: {fileID: 0}
@@ -178,9 +179,9 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Padding:
-      m_Left: 21
+      m_Left: 0
       m_Right: 0
-      m_Top: 10
+      m_Top: 0
       m_Bottom: 0
     m_Overflow:
       m_Left: 0
@@ -188,7 +189,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 0}
-    m_FontSize: 25
+    m_FontSize: 0
     m_FontStyle: 0
     m_Alignment: 0
     m_WordWrap: 0
