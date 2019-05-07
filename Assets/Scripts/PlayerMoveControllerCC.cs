@@ -5,9 +5,10 @@ using UnityEngine.Events;
 
 namespace SoulFood
 {
+    //Character Controller based Player Motion Controller
     [RequireComponent(typeof(PlayerInput))]
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerMoveController : MonoBehaviour
+    public class PlayerMoveControllerCC : MonoBehaviour
     {
         [Header("Move")]
         [SerializeField] float maxSpeed = 10f;
@@ -15,13 +16,13 @@ namespace SoulFood
 
         [Header("Dash")]
         [SerializeField] float dashSpeed = 13f;
-        [SerializeField] float dashReduction = 1.5f;
+        [SerializeField] float dashDrag = 1.5f;
         private bool isDashing;
-        float currentDashAmount;
+        float currentDashSpeed;
 
 
         [Header("Jump")]
-        [SerializeField] float jumpForce = 23.5f;
+        [SerializeField] float jumpSpeed = 23.5f;
         [SerializeField] float gravity = 3.5f;
         private bool isJumping;
         private Vector3 jumpMotion;
@@ -40,14 +41,14 @@ namespace SoulFood
         //CACHES
         new Camera camera;      //Required so that movement aligns with the view
         PlayerInput input;
-        CharacterController charctrl;
+        CharacterController controller;
 
 
 
         void Awake()
         {
             camera = Camera.main;
-            charctrl = GetComponent<CharacterController>();
+            controller = GetComponent<CharacterController>();
             input = GetComponent<PlayerInput>();
         }
 
@@ -63,8 +64,7 @@ namespace SoulFood
 
         void OnGUI()
         {
-            if (!displayDebug)
-                return;
+            if (!displayDebug) return;
                 
             GUILayout.Label("Controls: WASD Move. J Pick Up. K Action. L Dash. Space Jump", style);
             if (input.isPickup) GUILayout.Label("Picking up!", style);
@@ -80,42 +80,44 @@ namespace SoulFood
 
         void MoveCharacter()
         {
+#region Move & Dash
             //Set basic speed
             var speedTotal = maxSpeed;
 
-#region Dash
             //Calculate dash boost
             if (isDashing)   //Start reducing the dash boost (linearly) if currently dashing
             {
-                currentDashAmount -= dashReduction;
-                if (currentDashAmount < 0)
+                currentDashSpeed -= dashDrag;
+                if (currentDashSpeed < 0)
                 {
                     //Stop dash status and zero out
                     isDashing = false;
-                    currentDashAmount = 0;
+                    currentDashSpeed = 0;
                 }
             }
             if (input.wasDash && isDashing == false)  //Can't hold the dash button
             {
                 // speedMultiplier = dashSpeed;
                 isDashing = true;
-                currentDashAmount = dashSpeed;
+                currentDashSpeed = dashSpeed;
             }
             //Add dash
-            speedTotal += currentDashAmount;
+            speedTotal += currentDashSpeed;
+
+            //Calculate move motion vector
+            Vector3 moveMotion = input.xAxis * camera.transform.RightSansYNormalized() * speedTotal + 
+                                input.yAxis * camera.transform.ForwardSansYNormalized() * speedTotal;
 #endregion
 
 #region Jump
             //Calculate jump motion
-            // Vector3 jumpMotion = Vector3.zero;
-
-            if (charctrl.isGrounded)
+            if (controller.isGrounded)
             {
                 jumpMotion.y = -gravity;
                 if (input.wasJump)
                 {
                     // OnJump.Invoke();
-                    jumpMotion.y = jumpForce;
+                    jumpMotion.y = jumpSpeed;
                 }
             }
             else 
@@ -124,14 +126,9 @@ namespace SoulFood
             }
 #endregion
 
-            //Calculate move motion vector
-            Vector3 moveMotion = input.xAxis * camera.transform.RightSansYNormalized() * speedTotal + 
-                                input.yAxis * camera.transform.ForwardSansYNormalized() * speedTotal;
-
-            //Combine all motion vectors
-            Vector3 finalMotion = moveMotion + jumpMotion;
-
-            charctrl.Move(finalMotion * Time.deltaTime);
+            //Combine all motion vectors and apply to player
+            Vector3 resultantMotion = moveMotion + jumpMotion;
+            controller.Move(resultantMotion * Time.deltaTime);
         }
     }
 }
