@@ -1,4 +1,5 @@
 ﻿using System;
+using pokoro;
 using UnityEngine;
 
 namespace SoulFood
@@ -14,22 +15,22 @@ namespace SoulFood
 
         [Header("Dash")]
         [SerializeField] float dashDistance = 1f;
-        // [SerializeField] float dashSpeed = 13f;
-        // [SerializeField] float dashDrag = 1.5f;
         private bool isDashing;
         private Vector3 dashVelocity;
+        // [SerializeField] float dashDrag = 1.5f;
+        // [SerializeField] float dashSpeed = 13f;
         // float dashMotion;
 
 
         [Header("Jump")]
         [SerializeField] float jumpHeight = 1f;
-        // [SerializeField] float jumpForce = 23.5f;
-        // [SerializeField] float gravity = 3.5f;
         [SerializeField] LayerMask groundMask;
-        private Transform groundChecker;
-        private float groundCheckRadius = 0.2f;
+        [SerializeField] float groundCheckRadius = 0.2f;
+        [SerializeField] Transform groundCheck;
         private bool isGrounded;
         private bool isJumping;
+        // [SerializeField] float jumpForce = 23.5f;
+        // [SerializeField] float gravity = 3.5f;
         // private Vector3 jumpMotion;
 
 
@@ -45,9 +46,10 @@ namespace SoulFood
 
         void Awake()
         {
+            camera = Camera.main;   //TODO Danger!
             input = GetComponent<PlayerInput>();
             rb = GetComponent<Rigidbody>();
-            groundChecker = transform?.GetChild(0);
+            // groundChecker = transform?.GetChild(0);
         }
 
         void Update()
@@ -71,11 +73,8 @@ namespace SoulFood
                 //Trigger unity event etc
 
                 //Calculate dash velocity vector
-                dashVelocity = Vector3.Scale(transform.forward, 
-                                                        dashDistance * new Vector3(
-                                                        (Mathf.Log(1f / (Time.deltaTime * rb.drag + 1)) / -Time.deltaTime),
-                                                        0,
-                                                        (Mathf.Log(1f / (Time.deltaTime * rb.drag + 1)) / -Time.deltaTime)));
+                var dashValue = new Vector3((Mathf.Log(1f / (Time.deltaTime * rb.drag + 1)) / -Time.deltaTime), 0, (Mathf.Log(1f / (Time.deltaTime * rb.drag + 1)) / -Time.deltaTime));
+                dashVelocity = Vector3.Scale(transform.forward, dashDistance * dashValue);
 
                 //Apply instant dash to 
                 rb.AddForce(dashVelocity, ForceMode.VelocityChange);
@@ -89,15 +88,17 @@ namespace SoulFood
         }
         private void HandleJumping()
         {
-            isGrounded = Physics.CheckSphere(groundChecker.position, groundCheckRadius, groundMask, QueryTriggerInteraction.Ignore);
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask, QueryTriggerInteraction.Ignore);
+
             if (input.wasJump && isGrounded)
             {
                 //Start jump
                 isJumping = true;
+                isGrounded = false;
                 //trigger unity event etc
                 rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
             }
-            else if (isJumping == true && isGrounded)
+            if (isJumping == true && isGrounded)
             {
                 //Landed; End Jump
                 isJumping = false;
@@ -107,16 +108,23 @@ namespace SoulFood
 
         private void HandleRotate()
         {
-            throw new NotImplementedException();
+            //Do nothing
         }
         
         private void HandleMovement()
         {
-            Vector3 inputVector;
-            inputVector.x = input.xAxis;
-            inputVector.y = 0;
-            inputVector.z = input.yAxis;
-            rb.MovePosition(rb.position + inputVector * maxSpeed * Time.fixedDeltaTime);
+            // Vector3 inputVector;
+            // inputVector.x = input.xAxis * camera.transform.RightSansYNormalized().x;
+            // inputVector.y = 0;
+            // inputVector.z = input.yAxis * camera.transform.ForwardSansYNormalized().z;
+            var moveMotion = input.xAxis * camera.transform.RightSansYNormalized() + input.yAxis * camera.transform.ForwardSansYNormalized();
+            rb.MovePosition(rb.position + moveMotion * maxSpeed * Time.fixedDeltaTime);
+        }
+
+        void OnDrawGizmos()
+        {
+            //Draw ground check sphere
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
 
         void OnGUI()

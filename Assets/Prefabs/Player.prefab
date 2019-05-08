@@ -131,8 +131,8 @@ MonoBehaviour:
   maxSpeed: 10
   dashSpeed: 13
   dashDrag: 1.5
-  jumpSpeed: 23.5
-  gravity: 3.5
+  jumpSpeed: 19
+  gravity: 1.25
   displayDebug: 1
   style:
     m_Name: debug
@@ -217,8 +217,8 @@ MonoBehaviour:
   horizontalAxisName: Horizontal
   invertVertical: 0
   verticalAxisName: Vertical
-  pickupButton: 107
   actionButton: 106
+  pickupButton: 107
   dashButton: 108
   jumpButton: 32
 --- !u!136 &136097864290065504

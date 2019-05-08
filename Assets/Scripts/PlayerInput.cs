@@ -22,15 +22,15 @@ namespace SoulFood
         public float yAxis { get; private set; }
 
 		[Header("Buttons")]
-        //Pickup/Drop
-        [SerializeField] KeyCode pickupButton = KeyCode.K;
-        public bool isPickup { get; private set; }
-        public bool wasPickup { get; private set; }
-
         //Action
         [SerializeField] KeyCode actionButton = KeyCode.J;
         public bool isAction { get; private set; }
         public bool wasAction { get; private set; }
+
+        //Pickup/Drop
+        [SerializeField] KeyCode pickupButton = KeyCode.K;
+        public bool isPickup { get; private set; }
+        public bool wasPickup { get; private set; }
 
         //Dash
         [SerializeField] KeyCode dashButton = KeyCode.L;

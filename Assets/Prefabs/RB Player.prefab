@@ -19,8 +19,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4411994209598858}
-  - component: {fileID: 114657123501884278}
+  - component: {fileID: 136033612896792542}
   - component: {fileID: 54335780489922476}
+  - component: {fileID: 114657123501884278}
   - component: {fileID: 114121169927900068}
   m_Layer: 0
   m_Name: RB Player
@@ -72,8 +73,8 @@ Transform:
   m_LocalPosition: {x: 1.4, y: 0.9, z: -2.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4731510671422892}
   - {fileID: 4899323338878336}
+  - {fileID: 4731510671422892}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -88,7 +89,7 @@ Transform:
   m_LocalScale: {x: 1, y: 0.9, z: 1}
   m_Children: []
   m_Father: {fileID: 4411994209598858}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4899323338878336
 Transform:
@@ -97,11 +98,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1877241024207132}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.8, z: 0}
+  m_LocalPosition: {x: 0, y: -0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4411994209598858}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23322737579664240
 MeshRenderer:
@@ -118,7 +119,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: fe1ec10946e54d643bf02393a097ced7, type: 2}
+  - {fileID: 2100000, guid: f15cee39aa27e634a86248757c349700, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -173,10 +174,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 10
   dashDistance: 1
-  jumpHeight: 1
+  jumpHeight: 2
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1024
+  groundCheckRadius: 0.2
+  groundCheck: {fileID: 4899323338878336}
   displayDebug: 1
   style:
     m_Name: 
@@ -258,13 +261,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRaw: 0
   invertHorizontal: 0
-  horizontalAxisName: Horizontal
+  horizontalAxisName: Horizontal2
   invertVertical: 0
-  verticalAxisName: Vertical
-  pickupButton: 107
-  actionButton: 106
-  dashButton: 108
-  jumpButton: 32
+  verticalAxisName: Vertical2
+  actionButton: 260
+  pickupButton: 261
+  dashButton: 262
+  jumpButton: 256
+--- !u!136 &136033612896792542
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1575709283627464}
+  m_Material: {fileID: 13400000, guid: bee532233c2268a459b505933fb49634, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &136865299743588652
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d182998ef34d14df2b8c95a3b16bbc3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  edgePanningEnabled: 1
+  edgePanningEnabled: 0
   panBorderSize: 10
   panSpeed: 10
   turnSpeed: 180

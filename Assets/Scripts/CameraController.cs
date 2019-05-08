@@ -12,6 +12,13 @@ namespace SoulFood
         [SerializeField] float turnSpeed = 100f;
         [SerializeField] float zoomSpeed = 0.5f;
 
+        [Header("Input")]
+        [SerializeField] KeyCode leftKey = KeyCode.F;
+        [SerializeField] KeyCode rightKey = KeyCode.H;
+        [SerializeField] KeyCode upKey = KeyCode.T;
+        [SerializeField] KeyCode downKey= KeyCode.G;
+
+
         new Camera camera;
         Vector3 cameraInitLocalOffset;
         float zoomFactor = 1f;
@@ -74,22 +81,22 @@ namespace SoulFood
         private void HandleMoveAndRotate()
         {
             //Pan Up
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(upKey))
             {
                 transform.position += transform.forward * panSpeed * Time.deltaTime;
             }
             //Pan Down
-            if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(downKey))
             {
                 transform.position -= transform.forward * panSpeed * Time.deltaTime;
             }
             //Pan Left
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(leftKey))
             {
                 transform.position -= transform.right * panSpeed * Time.deltaTime;
             }
             //Pan Right
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(rightKey))
             {
                 transform.position += transform.right * panSpeed * Time.deltaTime;
             }
