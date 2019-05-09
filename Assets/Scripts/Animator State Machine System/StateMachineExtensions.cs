@@ -17,11 +17,11 @@ namespace AnimatorStateMachine
                 {
                     continue;
                 }
-
                 yield return stateBehaviour;
             }
         }
 
+        //Run this upon startup and pass in your state machine and animator
         public static void ConfigureAllStateBehaviours<TStateMachine>(this TStateMachine stateMachine, Animator animator)
         {
             foreach (IStateBehaviour<TStateMachine> behaviour in stateMachine.GetStateBehaviours(animator))

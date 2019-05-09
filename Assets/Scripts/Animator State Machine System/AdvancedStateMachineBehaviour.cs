@@ -9,9 +9,9 @@ namespace AnimatorStateMachine
     {
         bool isActive = false;
         bool isEnabled = true;
+        // TStateMachine mStateMachine;
+        protected TStateMachine stateMachine { get; private set; }
 
-        TStateMachine mStateMachine;
-        protected TStateMachine pStateMachine { get { return mStateMachine; } }
 
         //StateMachineBehaviour Lifecycle
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -63,7 +63,7 @@ namespace AnimatorStateMachine
         //IStateBehaviour<TStateMachine> Implementation
         void IStateBehaviour<TStateMachine>.InitializeWithContext(Animator animator, TStateMachine stateMachine)
         {
-            mStateMachine = stateMachine;
+            this.stateMachine = stateMachine;
             OnInitialized();
         }
 
@@ -86,6 +86,5 @@ namespace AnimatorStateMachine
         protected virtual void OnStateExited() { }
 
         protected virtual void OnStateUpdated() { }
-
     }
 }
