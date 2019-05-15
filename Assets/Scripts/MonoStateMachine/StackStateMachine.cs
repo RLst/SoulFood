@@ -31,6 +31,14 @@ namespace pokoro
 			//New state ENTERED
 			currentState.OnEnterState();
 		}
+		public void Switch(StackState state)
+		{
+			this.Push(state);
+		}
+		public override void Switch(State state)	//DANGER! Input state lacks StackState methods, maybe cause troubles down the line. Use Push() instead
+		{
+			this.Push(state as StackState);	//What happens if state can't be casted to StackState?
+		}
 
 		//Run current state each frame
 		internal override void Update()
@@ -40,7 +48,8 @@ namespace pokoro
 		}
 
 		//Remove current state
-		public State Pop()
+		public StackState Pop()		//TODO should this return State or StackState?
+		// public void Pop()		//TODO should this return State or StackState?
 		{
 			//If there aren't any states then warn and exit
 			if (!currentState)

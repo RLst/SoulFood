@@ -6,6 +6,8 @@ namespace pokoro
 //Stackable state
 public abstract class State : MonoBehaviour
 {
+	public new string name;
+
 	//Called AFTER the state has been placed on the state machine
 	public virtual void OnEnterState() { }
 

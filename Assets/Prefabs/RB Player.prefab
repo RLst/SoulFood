@@ -73,8 +73,8 @@ Transform:
   m_LocalPosition: {x: 1.4, y: 0.9, z: -2.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4899323338878336}
   - {fileID: 4731510671422892}
+  - {fileID: 4899323338878336}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -89,7 +89,7 @@ Transform:
   m_LocalScale: {x: 1, y: 0.9, z: 1}
   m_Children: []
   m_Father: {fileID: 4411994209598858}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4899323338878336
 Transform:
@@ -102,7 +102,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4411994209598858}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23322737579664240
 MeshRenderer:
@@ -174,10 +174,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 10
   dashDistance: 1
-  jumpHeight: 2
+  jumpHeight: 1
   groundMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   groundCheckRadius: 0.2
   groundCheck: {fileID: 4899323338878336}
   displayDebug: 1
@@ -261,13 +261,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRaw: 0
   invertHorizontal: 0
-  horizontalAxisName: Horizontal2
+  horizontalAxisName: Horizontal
   invertVertical: 0
-  verticalAxisName: Vertical2
-  actionButton: 260
-  pickupButton: 261
-  dashButton: 262
-  jumpButton: 256
+  verticalAxisName: Vertical
+  actionButton: 106
+  pickupButton: 107
+  dashButton: 108
+  jumpButton: 32
 --- !u!136 &136033612896792542
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -277,10 +277,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: bee532233c2268a459b505933fb49634, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1
+  m_Radius: 0.55
+  m_Height: 1.01
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: -0.03809321}
 --- !u!136 &136865299743588652
 CapsuleCollider:
   m_ObjectHideFlags: 1
