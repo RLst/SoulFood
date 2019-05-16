@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace AnimatorStateMachine
+namespace ASM
 {
     public interface IStateBehaviour<TStateMachine>
     {

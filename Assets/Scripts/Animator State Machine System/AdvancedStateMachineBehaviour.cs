@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace AnimatorStateMachine
+namespace ASM
 {
     //Inherit this class to make your own state machine behaviours
     public class AdvancedStateMachineBehaviour<TStateMachine> : StateMachineBehaviour, IStateBehaviour<TStateMachine>
