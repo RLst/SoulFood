@@ -29,56 +29,61 @@
         Tags 
         { 
             "RenderType"="Opaque" 
-            "LightMode" = "ForwardBase"
-            "PassFlags" = "OnlyDirectional"
         }
         LOD 100
 
         Pass
         {
+            Tags
+            {
+                "LightMode" = "ForwardBase"
+                "PassFlags" = "OnlyDirectional"
+            }
+        
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
+            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fog           //Make fog work
 
             #include "UnityCG.cginc"
             #include "Lighting.cginc"
+            #include "AutoLight.cginc"
 
             struct appdata
             {
                 //Stuff in here are populated automatically
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
-                
                 float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
                 //Stuff in here must be manually populated in the vertex shader
-                float4 vertex : SV_POSITION;
+                float4 pos : SV_POSITION;
                 float3 worldNormal : NORMAL;
                 float3 viewDir : TEXCOORD1;
+                float2 uv : TEXCOORD0;
                 
                 UNITY_FOG_COORDS(1)
-                float2 uv : TEXCOORD0;
+                SHADOW_COORDS(2)
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
+			//Vertex Shader
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
-                
-                //Transform the normal from object space to world space
+                o.pos = UnityObjectToClipPos(v.vertex);
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.viewDir = WorldSpaceViewDir(v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                // UNITY_TRANSFER_FOG(o,o.vertex);
                 
+                TRANSFER_SHADOW(o)
                 return o;
             }
             
@@ -98,14 +103,15 @@
             float _SpecularEdgeSmooth;
             float _RimEdgeSmoothing;
             
-            
+            //Fragment Shader            
             fixed4 frag (v2f i) : SV_Target
             {
                 float3 normal = normalize(i.worldNormal);
                 float NdotL = dot(_WorldSpaceLightPos0, normal);    //dot product of normal and light position
                 
                 //Calculate lighting intensity [Extra task: What if we wanted more than two discrete bands of shading?]
-                float lightIntensity = smoothstep(0, _EdgeSmooth, NdotL);
+                float shadow = SHADOW_ATTENUATION(i);
+                float lightIntensity = smoothstep(0, _EdgeSmooth, NdotL * shadow);
                 float4 light = lightIntensity * _LightColor0;   //LightColor0 is the color of the main directional light
                     
                 //Calculate specular intensity
@@ -132,5 +138,8 @@
             }
             ENDCG
         }
+        
+        //Shadow casting
+        UsePass "Legacy Shaders/VertexLit/ShadowCASTER"
     }
 }
