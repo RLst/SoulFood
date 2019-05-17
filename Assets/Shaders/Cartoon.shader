@@ -81,7 +81,7 @@
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.viewDir = WorldSpaceViewDir(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                // UNITY_TRANSFER_FOG(o,o.vertex);
+                UNITY_TRANSFER_FOG(o,o.pos);
                 
                 TRANSFER_SHADOW(o)
                 return o;

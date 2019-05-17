@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Cartoon
+  m_Name: WallToon
   m_Shader: {fileID: 4800000, guid: ad43b158f070a984e83ab6f481ded774, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -63,17 +63,17 @@ Material:
     - _EdgeSmooth: 0.015
     - _EdgeTransition: 0.01
     - _GlossMapScale: 1
-    - _Glossiness: 14.78
+    - _Glossiness: 6
     - _GlossyReflections: 1
     - _LightBands: 2
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RimAmount: 0.595
+    - _RimAmount: 0.669
     - _RimEdgeSmoothing: 0.015
     - _RimEdgeTransition: 0.01
-    - _RimThreshold: 0.488
+    - _RimThreshold: 0.463
     - _SmoothnessTextureChannel: 0
     - _SpecularEdgeSmooth: 0.015
     - _SpecularEdgeTransition: 0.01
@@ -84,7 +84,7 @@ Material:
     m_Colors:
     - _AmbientColor: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
     - _Color: {r: 0.27450985, g: 0.64680463, b: 0.98039216, a: 1}
-    - _DiffuseColor: {r: 0, g: 0.6043427, b: 1, a: 1}
+    - _DiffuseColor: {r: 1, g: 0.63569486, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _RimColor: {r: 0.94509804, g: 0.94509804, b: 0.94509804, a: 1}
-    - _SpecularColor: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
