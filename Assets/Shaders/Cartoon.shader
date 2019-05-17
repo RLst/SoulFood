@@ -4,17 +4,23 @@
     {
         [HDR]
         _AmbientColor("Ambient", Color) = (0.4, 0.4, 0.4, 1)
-        
-        _Color("Diffuse", Color) = (1, 0.5, 0, 1)
-        _LightBands("LightBands", Int) = 2      //Default to light and dark
-        _EdgeTransition("Edge Transition Factor", float) = 0.01
-        
+        _DiffuseColor("Diffuse", Color) = (1, 0.5, 0, 1)
         [HDR]
         _SpecularColor("Specular", Color) = (0.9, 0.9, 0.9, 1)
+        [HDR]
+        _RimColor("Rim", Color) = (1,1,1,1)
+        
+        [Space]
         _Glossiness("Glossiness", Float) = 32
-        _SpecularEdgeTransition("Specular Edge Transition Factor", float) = 0.01
+        _RimAmount("Rim Amount", Range(0,1)) = 0.716
         
+        [Space]
+        _LightBands("LightBands [Not Implemented Yet]", Int) = 2      //Default to light and dark
+        _EdgeTransition("Edge Transition", float) = 0.01
+        _SpecularEdgeTransition("Specular Edge Transition", float) = 0.01
+        _RimEdgeTransition("Rim Edge Transitoin", float) = 0.01
         
+        [Space]
         _MainTex ("Texture", 2D) = "white" {}
     }
     SubShader
@@ -75,30 +81,28 @@
                 return o;
             }
             
+            //Matching variables
             //QUESTION do these have to be here?
             float4 _AmbientColor;
+            float4 _DiffuseColor;
+            float4 _SpecularColor;
+            float4 _RimColor;
             
-            float4 _Color;
+            float _Glossiness;
+            float _RimAmount;
+            
             int _LightBands;
             float _EdgeTransition;
-            
-            float4 _SpecularColor;
-            float _Glossiness;
             float _SpecularEdgeTransition;
-            
+            float _RimEdgeTransition;
             
             fixed4 frag (v2f i) : SV_Target
             {
                 float3 normal = normalize(i.worldNormal);
                 float NdotL = dot(_WorldSpaceLightPos0, normal);    //dot product of normal and light position
                 
-                //Calculate lighting intensity
-                //Two lighting bands
-                    //Multiple lighting bands [Extra task: What if we wanted more than two discrete bands of shading?]
+                //Calculate lighting intensity [Extra task: What if we wanted more than two discrete bands of shading?]
                 float lightIntensity = smoothstep(0, _EdgeTransition, NdotL);
-                // float lightIntensity = NdotL > 0 ? 1 : 0;
-                            
-                //Include light color
                 float4 light = lightIntensity * _LightColor0;   //LightColor0 is the color of the main directional light
                     
                 //Calculate specular intensity
@@ -108,14 +112,19 @@
                 float specularIntensity = pow(NdotH * lightIntensity, _Glossiness * _Glossiness);   //Glossiness is multiplied by itself to allow smaller values int he material editor to have a larger effect, and make it easier to work with the shader
                 float specularIntensitySmooth = smoothstep(0.005, _SpecularEdgeTransition, specularIntensity);
                 float4 specular = specularIntensitySmooth * _SpecularColor;
-                    
+                
+                //Calculate rim lighting
+                float4 rimDot = 1 - dot(viewDir, normal);   //Calculate the rim by taking the dot product of the normal and the view direction and inverting it
+				float rimIntensity = smoothstep(_RimAmount - _RimEdgeTransition, _RimAmount + _RimEdgeTransition, rimDot);
+				float4 rim = rimIntensity * _RimColor;
+				                    
                 // sample the texture
                 fixed4 sample = tex2D(_MainTex, i.uv);
                                 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 
-                return _Color * sample * (_AmbientColor + light + specular);
+                return _DiffuseColor * sample * (_AmbientColor + light + specular + rim);
             }
             ENDCG
         }
