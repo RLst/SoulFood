@@ -6,13 +6,14 @@
         _AmbientColor("Ambient", Color) = (0.4, 0.4, 0.4, 1)
         
         _Color("Diffuse", Color) = (1, 0.5, 0, 1)
+        _LightBands("LightBands", Int) = 2      //Default to light and dark
+        _EdgeTransition("Edge Transition Factor", float) = 0.01
         
         [HDR]
         _SpecularColor("Specular", Color) = (0.9, 0.9, 0.9, 1)
         _Glossiness("Glossiness", Float) = 32
+        _SpecularEdgeTransition("Specular Edge Transition Factor", float) = 0.01
         
-        _EdgeTransition("Edge Transition Factor", float) = 0.01
-        _LightBands("LightBands", Int) = 2      //Default to light and dark
         
         _MainTex ("Texture", 2D) = "white" {}
     }
@@ -76,12 +77,15 @@
             
             //QUESTION do these have to be here?
             float4 _AmbientColor;
+            
             float4 _Color;
+            int _LightBands;
+            float _EdgeTransition;
+            
             float4 _SpecularColor;
             float _Glossiness;
+            float _SpecularEdgeTransition;
             
-            float _EdgeTransition;
-            int _LightBands;
             
             fixed4 frag (v2f i) : SV_Target
             {
@@ -102,6 +106,8 @@
                 float3 halfVector = normalize(_WorldSpaceLightPos0 + viewDir);
                 float NdotH = dot(normal, halfVector);
                 float specularIntensity = pow(NdotH * lightIntensity, _Glossiness * _Glossiness);   //Glossiness is multiplied by itself to allow smaller values int he material editor to have a larger effect, and make it easier to work with the shader
+                float specularIntensitySmooth = smoothstep(0.005, _SpecularEdgeTransition, specularIntensity);
+                float4 specular = specularIntensitySmooth * _SpecularColor;
                     
                 // sample the texture
                 fixed4 sample = tex2D(_MainTex, i.uv);
@@ -109,7 +115,7 @@
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 
-                return _Color * sample * (_AmbientColor + light + specularIntensity);
+                return _Color * sample * (_AmbientColor + light + specular);
             }
             ENDCG
         }
