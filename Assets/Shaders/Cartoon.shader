@@ -13,12 +13,13 @@
         [Space]
         _Glossiness("Glossiness", Float) = 32
         _RimAmount("Rim Amount", Range(0,1)) = 0.716
+        _RimThreshold("Rim Threshold", Range(0,1)) = 0.1
         
         [Space]
         _LightBands("LightBands [Not Implemented Yet]", Int) = 2      //Default to light and dark
-        _EdgeTransition("Edge Transition", float) = 0.01
-        _SpecularEdgeTransition("Specular Edge Transition", float) = 0.01
-        _RimEdgeTransition("Rim Edge Transitoin", float) = 0.01
+        _EdgeSmooth("Edge Smoothing", float) = 0.01
+        _SpecularEdgeSmooth("Specular Edge Smoothing", float) = 0.01
+        _RimEdgeSmoothing("Rim Edge Smoothing", float) = 0.01
         
         [Space]
         _MainTex ("Texture", 2D) = "white" {}
@@ -90,11 +91,13 @@
             
             float _Glossiness;
             float _RimAmount;
+            float _RimThreshold;
             
             int _LightBands;
-            float _EdgeTransition;
-            float _SpecularEdgeTransition;
-            float _RimEdgeTransition;
+            float _EdgeSmooth;
+            float _SpecularEdgeSmooth;
+            float _RimEdgeSmoothing;
+            
             
             fixed4 frag (v2f i) : SV_Target
             {
@@ -102,7 +105,7 @@
                 float NdotL = dot(_WorldSpaceLightPos0, normal);    //dot product of normal and light position
                 
                 //Calculate lighting intensity [Extra task: What if we wanted more than two discrete bands of shading?]
-                float lightIntensity = smoothstep(0, _EdgeTransition, NdotL);
+                float lightIntensity = smoothstep(0, _EdgeSmooth, NdotL);
                 float4 light = lightIntensity * _LightColor0;   //LightColor0 is the color of the main directional light
                     
                 //Calculate specular intensity
@@ -110,12 +113,13 @@
                 float3 halfVector = normalize(_WorldSpaceLightPos0 + viewDir);
                 float NdotH = dot(normal, halfVector);
                 float specularIntensity = pow(NdotH * lightIntensity, _Glossiness * _Glossiness);   //Glossiness is multiplied by itself to allow smaller values int he material editor to have a larger effect, and make it easier to work with the shader
-                float specularIntensitySmooth = smoothstep(0.005, _SpecularEdgeTransition, specularIntensity);
+                float specularIntensitySmooth = smoothstep(0.005, _SpecularEdgeSmooth, specularIntensity);
                 float4 specular = specularIntensitySmooth * _SpecularColor;
                 
                 //Calculate rim lighting
                 float4 rimDot = 1 - dot(viewDir, normal);   //Calculate the rim by taking the dot product of the normal and the view direction and inverting it
-				float rimIntensity = smoothstep(_RimAmount - _RimEdgeTransition, _RimAmount + _RimEdgeTransition, rimDot);
+				float rimIntensity = rimDot * pow(NdotL, _RimThreshold);
+				rimIntensity = smoothstep(_RimAmount - _RimEdgeSmoothing, _RimAmount + _RimEdgeSmoothing, rimIntensity);
 				float4 rim = rimIntensity * _RimColor;
 				                    
                 // sample the texture
