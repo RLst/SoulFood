@@ -46,7 +46,7 @@ namespace pokoro
 		}
 
 		//Run current state each frame
-		internal override void Update()
+		protected override void Update()
 		{
 			//Run the current top most state in the stack
 			currentState?.OnUpdate();

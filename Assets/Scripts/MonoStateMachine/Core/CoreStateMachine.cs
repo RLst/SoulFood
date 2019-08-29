@@ -15,7 +15,7 @@ namespace pokoro
 		}
 
 		//Run current state each frame 
-		internal virtual void Update()
+		protected virtual void Update()
 		{
 			//If current state exists then UPDATE
 			currentState?.OnUpdate();
